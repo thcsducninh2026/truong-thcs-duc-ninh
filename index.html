@@ -273,6 +273,14 @@ footer b{font-size:1.12rem;letter-spacing:-.02em}
 /* ===== TRÒ CHƠI LỚN ===== */
 .gm{max-width:780px;margin:0 auto}
 .gphotos img{cursor:zoom-in}
+.gmt{margin:6px 0 10px;font-size:1.15rem;font-weight:800;color:#087f70}
+.gbox{display:flex;align-items:center;gap:14px;width:100%;margin-top:6px;padding:16px 18px;border:0;border-radius:18px;background:#10243e;color:#fff;text-align:left;transition:transform .45s cubic-bezier(.22,1,.36,1),background .3s}
+.gbox:hover{transform:translateY(-3px)}
+.gbi{font-size:1.8rem;animation:gw 2.6s ease-in-out infinite}
+.gbt{flex:1;font-weight:800;font-size:1.1rem;color:#ffd166}
+.gbh{background:#ffd166;color:#10243e;font-weight:800;font-size:.85rem;padding:6px 14px;border-radius:99px;white-space:nowrap}
+.gbox.open{background:#087f70}.gbox.open .gbt{color:#fff}
+.gboxc{padding-top:16px;animation:in .6s cubic-bezier(.22,1,.36,1) both}
 .glb{position:fixed;inset:0;z-index:60;background:rgba(10,20,35,.88);display:grid;place-items:center;padding:16px;cursor:zoom-out;animation:gpop .3s}
 .glb img{max-width:100%;max-height:100%;border-radius:14px}
 .gban{display:flex;align-items:center;gap:16px;width:100%;margin:0 0 18px;padding:16px 22px;border:0;border-radius:22px;background:#10243e;color:#fff;text-align:left;transition:transform .45s cubic-bezier(.22,1,.36,1)}
@@ -449,38 +457,43 @@ const gans=(k,ph)=>`<div class="gans"><input id="in-${k}" placeholder="${ph}" au
 const gok=t=>`<div class="gok"><span>🎉</span><p>${t}</p></div>`;
 const gcipher=(l,b)=>`<div class="gcipher"><small>${l}</small>${b}</div>`;
 const chips=(s,sep)=>'<div class="gchips">'+s.split(sep).map((t,i)=>`<span style="--i:${i}">${t}</span>`).join('')+'</div>';
-const gate=(n,q)=>gdots(n)+`<span class="gbadge lock">🔒 CHẶNG ${n}</span><h2 class="gtitle">Mở khóa chặng ${n}</h2><p>Muốn lấy được mật mã của chặng ${n}, các bạn hãy trả lời câu hỏi sau:</p><div class="gq">${q}</div>`+gans('g'+n,'Nhập câu trả lời của bạn…');
+let gUI={};
+const gate=(n,q,t)=>gdots(n)+`<span class="gbadge lock">🔒 CHẶNG ${n}</span><h2 class="gtitle">Mở khóa chặng ${n}</h2><p>${t}</p><div class="gq">${q}</div>`+gans('g'+n,'Nhập câu trả lời của bạn…');
+const rt=()=>gUI.mt?'<p class="glead">Chào mừng các bạn đến với:</p>':right;
 const right=`<p class="gcorrect">✅ Chính xác!</p><p class="glead">Chào mừng các bạn đến với:</p>`;
-const dear='<p>Và đây là mật thư dành cho các bạn:</p>';
+const dear='<p>Và đây là Mật thư dành cho các bạn:</p>';
+const gbox=(t,inner)=>`<button class="gbox${gUI.box?' open':''}" data-box aria-expanded="${!!gUI.box}"><span class="gbi">📜</span><span class="gbt">${t}</span><span class="gbh">${gUI.box?'Đang mở':'Bấm để mở'}</span></button><div class="gboxc"${gUI.box?'':' hidden'}>${inner}</div>`;
 function gBuild(n){let h='';
- if(n===1){h=!GS.s1
-  ?`<div class="gwel"><div class="gtrophy">🗝️</div><span class="gbadge">TRÒ CHƠI LỚN</span><h2 class="gtitle">“GIẢI MÃ KHO BÁU ĐỨC NINH”</h2><p>Chào mừng các bạn đến với trò chơi lớn <b>“Giải mã kho báu Đức Ninh”</b>!</p><p>Các bạn đã sẵn sàng để bắt đầu chưa? Mình cùng bắt đầu nhé!</p><button class="gbtn big" data-start>Bắt đầu cuộc chơi 🚀</button></div>`
-  :`<p class="glead">Các bạn đang bước vào:</p>`+ghead(1,'MẬT MÃ KHỞI ĐẦU – KHÁM PHÁ ĐIỀU BÍ ẨN')+`<p>Sử dụng <b>BẢNG MÃ SỐ XÁO TRỘN</b> để giải mật thư sau:</p>`+gcipher('MẬT THƯ SỐ 01',chips('8 – 16 – 5 – 19 – 20',' – ')+chips('4 – 3 – 2 – 21 – 7 – 4 – 7 – 5 – 19 – 20',' – '))+(GS.a1?gok('CHÚC MỪNG CÁC BẠN, HÃY ĐẾN NƠI BẠN VỪA TÌM RA ĐỂ KHÁM PHÁ HÀNH TRÌNH TIẾP NHÉ!'):gans('a1','Nhập câu trả lời…'))}
- if(n===2)h=!GS.g2?gate(2,'Trường THCS Đức Ninh được thành lập vào năm học nào?')
-  :right+ghead(2,'GHÉP MẢNH THÔNG TIN – KẾT NỐI HÀNH TRÌNH')+dear+gcipher('MẬT THƯ SỐ 02','<p class="gsay">Hãy đến 1 nơi:</p><ol class="gol"><li>Nằm ở tầng 2, phía bên trái khi nhìn từ cổng trường vào.</li><li>Không phải nơi nghỉ ngơi giữa các tiết học, cũng không phải nơi dành riêng cho một cá nhân.</li><li>Là nơi tập thể giáo viên thường xuyên gặp gỡ, trao đổi và bàn bạc công việc chung.</li></ol><p class="gsay">Mình chờ bạn ở đó nhé! 👋</p>');
- if(n===3)h=!GS.g3?gate(3,'What is the full name of the current Principal of Duc Ninh Secondary School?')
-  :right+ghead(3,'CHUNG SỨC ĐỒNG ĐỘI – KẾT NỐI YÊU THƯƠNG')+dear+gcipher('MẬT THƯ SỐ 03',chips('S X A Y N Z T Q R M U E O W N P G',' '))+'<div class="ghint"><b>Gợi ý:</b><br>Lấy một chữ, bỏ một chữ đi,<br>Cứ theo thứ tự, tìm gì cũng ra.</div>'+(GS.a3?gok('Chính xác! Hãy chạy đến nơi bạn vừa giải mã được để tiếp tục hành trình nhé!'):gans('a3','Nhập câu trả lời…'));
- if(n===4)h=`<p class="glead">Chào mừng các bạn đến với:</p>`+ghead(4,'DẤU VẾT QUA ỐNG KÍNH – TÌM KIẾM ĐỊA ĐIỂM')+dear+gcipher('MẬT THƯ SỐ 04','<p class="gsay big">Đây là đâu? 🔍</p><div class="gphotos">'+[0,1,2].map(i=>PH4[i]?`<img src="${PH4[i]}" alt="Ảnh gợi ý ${i+1}">`:`<div class="gph"><span>📷</span>Ảnh ${i+1}<small>đang cập nhật</small></div>`).join('')+'</div><p class="gsay">Mình sẽ đợi các bạn ở đó!</p>')+(GS.a4?gok('Chính xác! Hãy chạy đến nơi bạn vừa tìm ra để tiếp tục hành trình nhé!'):gans('a4','Nhập câu trả lời…'));
+ if(n===1){h=!gUI.s1
+  ?`<div class="gwel"><div class="gtrophy">🗝️</div><p class="glead">Chào mừng các bạn đến với</p><span class="gbadge">TRÒ CHƠI LỚN</span><h2 class="gtitle">“GIẢI MÃ KHO BÁU ĐỨC NINH”</h2><p>Các bạn đã sẵn sàng để bắt đầu chưa? Mình cùng bắt đầu nhé!</p><button class="gbtn big" data-start>Bắt đầu cuộc chơi 🚀</button></div>`
+  :`<p class="glead">Các bạn đang bước vào:</p>`+ghead(1,'MẬT MÃ KHỞI ĐẦU – KHÁM PHÁ ĐIỀU BÍ ẨN')+`<h3 class="gmt">Mật thư số 1</h3><p>Sử dụng <b>BẢNG MÃ SỐ XÁO TRỘN</b> để giải mật thư sau:</p>`+gcipher('MẬT THƯ SỐ 01',chips('8 – 16 – 5 – 19 – 20',' – ')+chips('4 – 3 – 2 – 21 – 7 – 4 – 7 – 5 – 19 – 20',' – '))+(GS.a1?gok('CHÚC MỪNG CÁC BẠN, HÃY ĐẾN NƠI BẠN VỪA TÌM RA ĐỂ KHÁM PHÁ HÀNH TRÌNH TIẾP NHÉ'):gans('a1','Nhập câu trả lời…'))}
+ if(n===2)h=!GS.g2&&!gUI.mt?gate(2,'Trường THCS Đức Ninh được thành lập vào năm học nào?','Muốn lấy được mật mã của chặng 2, các bạn hãy trả lời câu hỏi để lấy mật thư:')
+  :rt()+ghead(2,'GHÉP MẢNH THÔNG TIN – KẾT NỐI HÀNH TRÌNH')+gbox('Mật thư số 3',dear+gcipher('MẬT THƯ SỐ 03','<p class="gsay">Hãy đến 1 nơi:</p><ol class="gol"><li>Nằm ở tầng 2, phía bên trái khi nhìn từ cổng trường vào.</li><li>Không phải nơi nghỉ ngơi giữa các tiết học, cũng không phải nơi dành riêng cho một cá nhân.</li><li>Là nơi tập thể giáo viên thường xuyên gặp gỡ, trao đổi và bàn bạc công việc chung.</li></ol><p class="gsay">Mình chờ bạn ở đó nhé! 👋</p>'));
+ if(n===3)h=!GS.g3&&!gUI.mt?gate(3,'What is the full name of the current Principal of Duc Ninh Secondary School?','Muốn lấy được mật mã của chặng 3, các bạn hãy trả lời câu hỏi sau:')
+  :rt()+ghead(3,'CHUNG SỨC ĐỒNG ĐỘI – KẾT NỐI YÊU THƯƠNG')+gbox('Mật thư số 4','<p>Và đây là Mật thư số 4 dành cho các bạn:</p>'+gcipher('MẬT THƯ SỐ 03',chips('S X A Y N Z T Q R M U E O W N P G',' '))+'<div class="ghint"><b>Gợi ý:</b><br>Lấy một chữ, bỏ một chữ đi,<br>Cứ theo thứ tự, tìm gì cũng ra.</div>'+(GS.a3?gok('Chính xác! Hãy chạy đến nơi bạn vừa giải mã được để tiếp tục hành trình nhé!'):gans('a3','Nhập câu trả lời…')));
+ if(n===4)h=`<p class="glead">Chào mừng các bạn đến với:</p>`+ghead(4,'DẤU VẾT QUA ỐNG KÍNH – TÌM KIẾM ĐỊA ĐIỂM')+gbox('Mật thư số 4',dear+gcipher('MẬT THƯ SỐ 04','<p class="gsay big">Đây là đâu? 🔍</p><div class="gphotos">'+[0,1,2].map(i=>PH4[i]?`<img src="${PH4[i]}" alt="Ảnh gợi ý ${i+1}">`:`<div class="gph"><span>📷</span>Ảnh ${i+1}<small>đang cập nhật</small></div>`).join('')+'</div><p class="gsay">Mình sẽ đợi các bạn ở đó!</p>')+(GS.a4?gok('Chính xác! Hãy chạy đến nơi bạn vừa tìm ra để tiếp tục hành trình nhé!'):gans('a4','Nhập câu trả lời…')));
  if(n===5)h=`<p class="glead">Các bạn đang đến rất gần kho báu rồi, và đây là mật thư dành cho các bạn:</p>`+gdots(5)+`<span class="gbadge">CHẶNG 5</span>`+gcipher('MẬT THƯ SỐ 05',C5||'<p class="gsay">🧩 Giải mật thư số 05 mà giáo viên trao cho các bạn, rồi nhập đáp án bên dưới nhé!</p>')+(GS.a5?gok('KHO BÁU ĐANG CHỜ CÁC BẠN TẠI PHÒNG HỌC LỚP TÁM BỐN!'):gans('a5','Nhập đáp án mật thư số 05…'))+'<p class="gfinal">Nhanh lên nhé! Kho báu đang chờ các bạn khám phá! 💎</p>';
  return `<div class="gcard">${h}</div>`}
 function openGame(n){gStage=n;const g=$('game');g.hidden=false;g.innerHTML=gBuild(n);enter('game')}
 $('game').addEventListener('click',e=>{
  const im=e.target.closest('.gphotos img');if(im){const o=document.createElement('div');o.className='glb';o.innerHTML='<img src="'+im.src+'" alt="">';o.onclick=()=>o.remove();document.body.appendChild(o);return}
- if(e.target.closest('[data-start]')){GS.s1=1;gsave();openGame(1);return}
+ if(e.target.closest('[data-start]')){gUI.s1=1;openGame(1);return}
+ const bx=e.target.closest('[data-box]');if(bx){gUI.box=!gUI.box;bx.classList.toggle('open',gUI.box);bx.setAttribute('aria-expanded',gUI.box);bx.nextElementSibling.hidden=!gUI.box;bx.querySelector('.gbh').textContent=gUI.box?'Đang mở':'Bấm để mở';return}
  const b=e.target.closest('[data-chk]');if(!b)return;
  const k=b.dataset.chk,inp=$('in-'+k),fb=$('fb-'+k);
  if(CK[k](gnorm(inp.value))){GS[k]=1;gsave();openGame(gStage);$('game').scrollIntoView({behavior:'smooth',block:'start'})}
  else{fb.textContent=inp.value.trim()?'Chưa chính xác, hãy thử lại nhé! 💪':'Hãy nhập câu trả lời trước nhé!';inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake')}});
 $('game').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input')){e.preventDefault();e.target.closest('.gans').querySelector('button').click()}});
+const QRS=[['CHẶNG 1','chang1','Điểm xuất phát – màn chào mừng và Mật thư số 1'],['MẬT THƯ SỐ 1','chang1-matthu','Mở thẳng Mật thư số 1, bỏ qua màn chào mừng'],['CHẶNG 2','chang2','Phòng truyền thống – câu hỏi mở khóa chặng 2'],['MẬT THƯ SỐ 3','chang2-matthu','Chặng 2 – mở thẳng mật thư về phòng Họp Hội đồng'],['CHẶNG 3','chang3','Phòng Họp Hội đồng – câu hỏi mở khóa chặng 3'],['MẬT THƯ SỐ 4','chang3-matthu','Chặng 3 – mở thẳng mật thư dãy chữ cái'],['CHẶNG 4','chang4','Sân trường – phát sau trò chơi tập thể'],['MẬT THƯ SỐ 4','chang4-matthu','Chặng 4 – mở thẳng mật thư 3 ảnh'],['CHẶNG 5','chang5','Nhà thi đấu – Mật thư số 05']];
 function openQR(){const g=$('qr');g.hidden=false;const base=location.href.split('#')[0].split('?')[0];
- const L=['Điểm xuất phát (mở đầu trò chơi)','Phòng truyền thống','Phòng Họp Hội đồng','Sân trường – sau trò chơi tập thể','Nhà thi đấu – sau câu hỏi của giáo viên'];
- g.innerHTML='<div class="qhead"><h2>🧾 Mã QR 5 chặng chơi</h2><p class="sub">Mã QR được tạo theo địa chỉ đang mở: <b>'+base+'</b>. Hãy mở trang này từ đường link chính thức của website rồi mới in.</p><div class="noprint"><button class="gbtn" id="qp">🖨️ In trang</button><button class="gbtn alt" id="qz">↺ Xóa tiến độ chơi trên máy này</button></div></div><div class="qgrid">'+L.map((t,i)=>`<div class="qc"><b>CHẶNG ${i+1}</b><div class="qr" id="qr${i+1}"></div><p>${t}</p><code>${base}?c=${i+1}#chang${i+1}</code><button class="gbtn sm noprint" data-dl="${i+1}">Tải ảnh PNG</button></div>`).join('')+'</div>';
+ const url=i=>base+'?c='+(i+1)+'#'+QRS[i][1];
+ g.innerHTML='<div class="qhead"><h2>🧾 Mã QR các chặng và mật thư</h2><p class="sub">Mã QR được tạo theo địa chỉ đang mở: <b>'+base+'</b>. Hãy mở trang này từ đường link chính thức của website rồi mới in. Mã <b>CHẶNG</b> mở trang của chặng (có câu hỏi mở khóa); mã <b>MẬT THƯ</b> mở thẳng nội dung mật thư đó.</p><div class="noprint"><button class="gbtn" id="qp">🖨️ In trang</button><button class="gbtn alt" id="qz">↺ Xóa tiến độ chơi trên máy này</button></div></div><div class="qgrid">'+QRS.map((q,i)=>`<div class="qc"><b${q[1].includes('matthu')?' style="background:#087f70;color:#fff"':''}>${q[0]}</b><div class="qr" id="qr${i}"></div><p>${q[2]}</p><code>${url(i)}</code><button class="gbtn sm noprint" data-dl="${i}">Tải ảnh PNG</button></div>`).join('')+'</div>';
  $('qp').onclick=()=>print();$('qz').onclick=e=>{try{localStorage.removeItem(GK)}catch(x){}GS={};e.target.textContent='Đã xóa ✓'};
- g.onclick=e=>{const d=e.target.closest('[data-dl]');if(!d)return;const c=$('qr'+d.dataset.dl).querySelector('canvas');if(c){const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='QR-chang-'+d.dataset.dl+'.png';a.click()}};
- const mk=()=>{for(let n=1;n<=5;n++){const el=$('qr'+n);el.innerHTML='';new QRCode(el,{text:base+'?c='+n+'#chang'+n,width:200,height:200,correctLevel:QRCode.CorrectLevel.M})}};
+ g.onclick=e=>{const d=e.target.closest('[data-dl]');if(!d)return;const i=+d.dataset.dl,c=$('qr'+i).querySelector('canvas');if(c){const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='QR-'+QRS[i][1]+'.png';a.click()}};
+ const mk=()=>{QRS.forEach((q,i)=>{const el=$('qr'+i);el.innerHTML='';new QRCode(el,{text:url(i),width:200,height:200,correctLevel:QRCode.CorrectLevel.M})})};
  if(window.QRCode)mk();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=mk;s.onerror=()=>{g.querySelector('.sub').append(' (Không tải được thư viện tạo QR, hãy kiểm tra kết nối mạng.)')};document.head.appendChild(s)}}
 function route(h){$('game').hidden=true;$('qr').hidden=true;
- if(/^chang[1-5]$/.test(h)){$('home').hidden=true;$('map').hidden=true;cur=h;setNav('g');openGame(+h.slice(5))}
+ if(/^chang[1-5](-matthu)?$/.test(h)){$('home').hidden=true;$('map').hidden=true;cur=h;gUI=/matthu/.test(h)?{mt:1,box:1,s1:1}:{};setNav('g');openGame(+h[5])}
  else if(h==='qr'){$('home').hidden=true;$('map').hidden=true;cur=h;setNav('');openQR()}
  else{(h==='main'||h==='branch')?openMap(h):openHome()}
  window.scrollTo(0,0)}
